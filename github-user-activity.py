@@ -15,7 +15,15 @@ try:
     with urllib.request.urlopen(url) as response:
         data = json.load(response)
     
-        print(json.dumps(data, indent=4))
+        for event in data:
+            event_type = event["type"]
+            repo_name = event["repo"]["name"]
+            print(event_type)
+            print(repo_name)
+
+            if event_type == "PushEvent":
+                commit_count = len(event["payload"]["commits"])
+                print(f"Pushed {commit_count} commits to {repo_name}")
 
 except urllib.error.HTTPError as e:
     print(f"HTTP Error: {e.code} - {e.reason}")
