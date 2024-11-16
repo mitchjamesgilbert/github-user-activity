@@ -14,13 +14,10 @@ url = f"https://api.github.com/users/{username}/events"
 try:
     with urllib.request.urlopen(url) as response:
         data = json.load(response)
-        # print(json.dumps(data, indent=4))
     
         for event in data:
             event_type = event["type"]
             repo_name = event["repo"]["name"]
-            # print(event_type)
-            # print(repo_name)
 
             if event_type == "PushEvent":
                 commit_count = len(event["payload"]["commits"])
@@ -41,6 +38,9 @@ try:
                     print(f"- Created a new repository: {repo_name}")
                 else:
                     print(f"- Created a new {ref_type} '{ref_name}' in {repo_name}")
+            
+            elif event_type == "ForkEvent":
+                print(f"Forked {repo_name}")
 
 except urllib.error.HTTPError as e:
     print(f"HTTP Error: {e.code} - {e.reason}")
